@@ -1,12 +1,12 @@
 "use client";
 
-import useSocket from "@/hooks/useSocket";
 import React from "react";
 import Message from "./Message";
+import { useSocketContext } from "@/app/contexts/SocketContext";
 
 const MessageFeed = () => {
   // Hooks
-  const { messages } = useSocket();
+  const { messages } = useSocketContext();
 
   return (
     <div className="">

@@ -3,7 +3,7 @@ import { socket } from "../socket";
 
 const useSocket = () => {
   // State
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState<boolean>(socket.connected);
   const [messages, setMessages] = useState<string[]>([]);
 
   // Effects

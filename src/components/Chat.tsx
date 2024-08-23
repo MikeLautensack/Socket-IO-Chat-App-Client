@@ -3,12 +3,12 @@
 import React, { useEffect } from "react";
 import MessageFeed from "./MessageFeed";
 import ChatInput from "./ChatInput";
-import useSocket from "@/hooks/useSocket";
 import { Typography } from "@mui/material";
+import { useSocketContext } from "@/app/contexts/SocketContext";
 
 const Chat = () => {
   // Hooks
-  const { isConnected, connect, disconnect } = useSocket();
+  const { isConnected, connect, disconnect } = useSocketContext();
 
   // Effects
   useEffect(() => {

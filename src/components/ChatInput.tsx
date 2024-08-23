@@ -1,12 +1,12 @@
 "use client";
 
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import React, { useCallback } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import TextInput from "./TextInput";
-import useSocket from "@/hooks/useSocket";
+import { useSocketContext } from "@/app/contexts/SocketContext";
 
 const MessageFormSchema = z.object({
   message: z.string().min(1, { message: "Message is required" }),
@@ -23,7 +23,7 @@ const ChatInput = () => {
     },
   });
 
-  const { sendMessage } = useSocket();
+  const { sendMessage } = useSocketContext();
 
   // Callbacks
   const submit: SubmitHandler<MessageFormValues> = useCallback(
