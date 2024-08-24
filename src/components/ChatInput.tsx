@@ -35,8 +35,7 @@ const ChatInput = () => {
   return (
     <FormProvider {...methods}>
       <form className="flex" onSubmit={methods.handleSubmit(submit)}>
-        <TextInput name="message" label="Message" />
-        <Button type="submit">Send!</Button>
+        <TextInput name="message" />
       </form>
     </FormProvider>
   );
