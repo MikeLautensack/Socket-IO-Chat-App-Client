@@ -1,4 +1,5 @@
 import { Box, Button, TextField } from "@mui/material";
+import { Session } from "next-auth";
 import React from "react";
 import { useController, useFormContext } from "react-hook-form";
 
@@ -9,6 +10,8 @@ type TextInputProps = {
   readonly?: boolean;
   disabled?: boolean;
   type?: string;
+  activityHandler?: (username: string) => void;
+  session: Session;
 };
 
 const TextInput = ({
@@ -18,6 +21,8 @@ const TextInput = ({
   readonly,
   disabled,
   type,
+  activityHandler,
+  session,
 }: TextInputProps) => {
   // Hooks
   const {
@@ -54,7 +59,14 @@ const TextInput = ({
         type={type}
         error={!!errors[name]}
         helperText={errors[name]?.message as React.ReactNode}
-        {...field}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          field.onChange(e);
+          if (activityHandler) {
+            activityHandler(session.user?.name!);
+          }
+        }}
+        value={field.value}
+        ref={field.ref}
       />
       <Button
         type="submit"

@@ -2,9 +2,10 @@ import { Typography } from "@mui/material";
 import { Session } from "next-auth";
 import React from "react";
 import Image from "next/image";
+import { Message as MessageType } from "@/hooks/useSocket";
 
 type MessageProps = {
-  message: string;
+  message: MessageType;
   session: Session;
   index: number;
 };
@@ -19,7 +20,7 @@ const Message = ({ message, session, index }: MessageProps) => {
       <div className="relative w-8 h-8 mr-2">
         <Image
           fill
-          src={session.user?.image!}
+          src={message.profileImg}
           alt={session.user?.id!}
           className="rounded-full" // Optional: if you want a circular image
           style={{ objectFit: "cover" }} // This ensures the image covers the area without stretching
@@ -32,7 +33,7 @@ const Message = ({ message, session, index }: MessageProps) => {
           color="primary"
         >{`${session.user?.name}:`}</Typography>
         <Typography variant="body1" className="" color="primary">
-          {message}
+          {message.message}
         </Typography>
       </div>
     </div>

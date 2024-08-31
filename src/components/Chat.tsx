@@ -13,7 +13,7 @@ type ChatProps = {
 
 const Chat = ({ session }: ChatProps) => {
   // Hooks
-  const { isConnected, connect, disconnect } = useSocketContext();
+  const { isConnected, connect, disconnect, activeUser } = useSocketContext();
 
   // Effects
   useEffect(() => {
@@ -40,7 +40,12 @@ const Chat = ({ session }: ChatProps) => {
         ></div>
       </div>
       <MessageFeed session={session} />
-      <ChatInput />
+      <div>
+        <Typography color="primary">{`${activeUser} ${
+          activeUser ? "..." : ""
+        }`}</Typography>
+      </div>
+      <ChatInput session={session} />
     </div>
   );
 };

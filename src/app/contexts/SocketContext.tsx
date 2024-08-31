@@ -1,6 +1,6 @@
 "use client";
 
-import useSocket from "@/hooks/useSocket";
+import useSocket, { Message } from "@/hooks/useSocket";
 import React, { createContext, useContext } from "react";
 
 type SocketContextProviderProps = {
@@ -9,25 +9,36 @@ type SocketContextProviderProps = {
 
 type SocketContextState = {
   isConnected: boolean;
-  messages: string[];
-  sendMessage: (message: string) => void;
+  messages: Message[];
+  sendMessage: (message: string, profileImg: string) => void;
+  onActivity: (username: string) => void;
   connect: () => void;
   disconnect: () => void;
+  activeUser: string;
 };
 
 export const SocketContext = createContext<SocketContextState | null>(null);
 
 const SocketContextProvider = ({ children }: SocketContextProviderProps) => {
-  const { isConnected, messages, sendMessage, connect, disconnect } =
-    useSocket();
+  const {
+    isConnected,
+    messages,
+    sendMessage,
+    onActivity,
+    connect,
+    disconnect,
+    activeUser,
+  } = useSocket();
   return (
     <SocketContext.Provider
       value={{
         isConnected,
         messages,
         sendMessage,
+        onActivity,
         connect,
         disconnect,
+        activeUser,
       }}
     >
       {children}
