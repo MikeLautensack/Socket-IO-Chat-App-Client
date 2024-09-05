@@ -34,8 +34,9 @@ const ChatInput = ({ session }: ChatInputProps) => {
   const submit: SubmitHandler<MessageFormValues> = useCallback(
     async (formData) => {
       sendMessage(formData.message, session.user?.image!);
+      methods.reset();
     },
-    [sendMessage, session.user?.image]
+    [methods, sendMessage, session.user?.image]
   );
 
   return (

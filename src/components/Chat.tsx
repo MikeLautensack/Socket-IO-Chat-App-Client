@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import MessageFeed from "./MessageFeed";
 import ChatInput from "./ChatInput";
 import { Typography } from "@mui/material";
@@ -13,17 +13,7 @@ type ChatProps = {
 
 const Chat = ({ session }: ChatProps) => {
   // Hooks
-  const { isConnected, connect, disconnect, activeUser } = useSocketContext();
-
-  // Effects
-  useEffect(() => {
-    connect();
-    return () => {
-      console.log("Component unmounting, disconnecting socket");
-      disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { isConnected, activeUser } = useSocketContext();
 
   return (
     <div className="flex flex-col justify-between gap-4 w-full h-full">

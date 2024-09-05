@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import SocketContextProvider from "./contexts/SocketContext";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import ThemeProviderWrapper from "@/components/ThemeProviderWrapper";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
@@ -22,11 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <InitColorSchemeScript attribute="class" />
-        <SocketContextProvider>
-          <AppRouterCacheProvider>
-            <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
-          </AppRouterCacheProvider>
-        </SocketContextProvider>
+        <AppRouterCacheProvider>
+          <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

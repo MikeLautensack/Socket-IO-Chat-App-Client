@@ -8,7 +8,9 @@ import { FcGoogle } from "react-icons/fc";
 const Login = () => {
   return (
     <Button
-      onClick={() => signIn("google", { callbackUrl: "/chat", redirect: true })}
+      onClick={() =>
+        signIn("google", { callbackUrl: "/chat-dashboard", redirect: true })
+      }
       variant="contained"
       className="flex gap-2"
     >
