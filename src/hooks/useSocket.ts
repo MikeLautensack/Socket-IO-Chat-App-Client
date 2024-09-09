@@ -1,26 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
-import { socket } from "../socket";
+import { getSocket } from "../socket";
 
 export type Message = {
   message: string;
+  username: string;
   profileImg: string;
-};
-
-export type Room = {
-  id: number;
-  name: string;
 };
 
 const useSocket = () => {
   // State
-  const [isConnected, setIsConnected] = useState<boolean>(socket.connected);
+  const [isConnected, setIsConnected] = useState<boolean | undefined>(
+    undefined
+  );
   const [messages, setMessages] = useState<Message[]>([]);
   const [activeUser, setActiveUser] = useState<string>("");
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<string[]>([]);
 
   // Effects
   useEffect(() => {
-    console.log("useSocket useEffect firing");
+    const socket = getSocket();
 
     function onConnect() {
       setIsConnected(true);
@@ -33,11 +31,15 @@ const useSocket = () => {
     }
 
     function onMessage(value: Message) {
+      console.log("testing message event", value);
       setMessages((prev) => [
         ...prev,
-        { message: value.message, profileImg: value.profileImg },
+        {
+          message: value.message,
+          username: value.username,
+          profileImg: value.profileImg,
+        },
       ]);
-      console.log("message event fired");
     }
 
     function onActivity(value: string) {
@@ -48,30 +50,22 @@ const useSocket = () => {
     }
 
     function onRoomList(value: string[]) {
-      console.log("testing onRoomList", value);
       setRooms(
-        value.map((room, index) => {
-          return {
-            id: index,
-            name: room,
-          };
+        value.map((room) => {
+          return room;
         })
       );
     }
 
     function onUpdateRooms(value: string[]) {
-      console.log("testing onUpdateRooms", value);
       setRooms(
-        value.map((room, index) => {
-          return {
-            id: index,
-            name: room,
-          };
+        value.map((room) => {
+          return room;
         })
       );
     }
 
-    function onJoinRoom() {}
+    function onJoinRoom(value: string) {}
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
@@ -80,6 +74,10 @@ const useSocket = () => {
     socket.on("roomList", onRoomList);
     socket.on("joinRoom", onJoinRoom);
     socket.on("updateRooms", onUpdateRooms);
+
+    if (!socket.connected) {
+      socket.connect();
+    }
 
     return () => {
       socket.off("connect", onConnect);
@@ -91,29 +89,26 @@ const useSocket = () => {
     };
   }, []);
 
-  // Callbacks
-  const connect = useCallback(() => {
-    socket.connect();
-    console.log("connect callback called");
-  }, []);
-
-  const disconnect = useCallback(() => {
-    socket.disconnect();
-    console.log("disconnect callback called");
-  }, []);
-
-  const sendMessage = useCallback((message: string, profileImg: string) => {
-    socket.emit("message", { message, profileImg });
-    console.log("sendMessage callback called");
-  }, []);
+  const sendMessage = useCallback(
+    (
+      message: string,
+      username: string,
+      profileImg: string,
+      roomname: string
+    ) => {
+      const socket = getSocket();
+      socket.emit("message", { message, username, profileImg, roomname });
+    },
+    []
+  );
 
   const onActivity = useCallback((username: string) => {
+    const socket = getSocket();
     socket.emit("activity", username);
-    console.log("onActivity callback called");
   }, []);
 
   const onJoinRoom = useCallback((roomname: string, username: string) => {
-    console.log("testing onJoinRoom");
+    const socket = getSocket();
     socket.emit("joinRoom", { roomname, username });
   }, []);
 
@@ -125,8 +120,6 @@ const useSocket = () => {
     sendMessage,
     onActivity,
     onJoinRoom,
-    connect,
-    disconnect,
     activeUser,
   };
 };

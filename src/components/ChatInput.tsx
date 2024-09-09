@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@mui/material";
 import React, { useCallback } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,9 +16,10 @@ type MessageFormValues = z.infer<typeof MessageFormSchema>;
 
 type ChatInputProps = {
   session: Session;
+  roomname: string;
 };
 
-const ChatInput = ({ session }: ChatInputProps) => {
+const ChatInput = ({ session, roomname }: ChatInputProps) => {
   // Hooks
   const methods = useForm<MessageFormValues>({
     resolver: zodResolver(MessageFormSchema),
@@ -33,10 +33,15 @@ const ChatInput = ({ session }: ChatInputProps) => {
   // Callbacks
   const submit: SubmitHandler<MessageFormValues> = useCallback(
     async (formData) => {
-      sendMessage(formData.message, session.user?.image!);
+      sendMessage(
+        formData.message,
+        session.user?.name!,
+        session.user?.image!,
+        roomname
+      );
       methods.reset();
     },
-    [methods, sendMessage, session.user?.image]
+    [methods, roomname, sendMessage, session.user?.image, session.user?.name]
   );
 
   return (

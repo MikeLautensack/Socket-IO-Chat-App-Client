@@ -1,6 +1,6 @@
 "use client";
 
-import useSocket, { Message, Room } from "@/hooks/useSocket";
+import useSocket, { Message } from "@/hooks/useSocket";
 import React, { createContext, useContext, useEffect } from "react";
 
 type SocketContextProviderProps = {
@@ -8,14 +8,17 @@ type SocketContextProviderProps = {
 };
 
 type SocketContextState = {
-  isConnected: boolean;
+  isConnected: boolean | undefined;
   messages: Message[];
-  rooms: Room[];
-  sendMessage: (message: string, profileImg: string) => void;
+  rooms: string[];
+  sendMessage: (
+    message: string,
+    username: string,
+    profileImg: string,
+    roomname: string
+  ) => void;
   onActivity: (username: string) => void;
   onJoinRoom: (roomname: string, username: string) => void;
-  connect: () => void;
-  disconnect: () => void;
   activeUser: string;
 };
 
@@ -30,20 +33,8 @@ const SocketContextProvider = ({ children }: SocketContextProviderProps) => {
     sendMessage,
     onActivity,
     onJoinRoom,
-    connect,
-    disconnect,
     activeUser,
   } = useSocket();
-
-  // Effects
-  useEffect(() => {
-    connect();
-    return () => {
-      console.log("Component unmounting, disconnecting socket");
-      disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <SocketContext.Provider
@@ -54,8 +45,6 @@ const SocketContextProvider = ({ children }: SocketContextProviderProps) => {
         sendMessage,
         onActivity,
         onJoinRoom,
-        connect,
-        disconnect,
         activeUser,
       }}
     >

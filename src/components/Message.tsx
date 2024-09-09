@@ -21,7 +21,7 @@ const Message = ({ message, session, index }: MessageProps) => {
         <Image
           fill
           src={message.profileImg}
-          alt={session.user?.id!}
+          alt={session.user?.name!}
           className="rounded-full" // Optional: if you want a circular image
           style={{ objectFit: "cover" }} // This ensures the image covers the area without stretching
         />
@@ -31,7 +31,7 @@ const Message = ({ message, session, index }: MessageProps) => {
           variant="body1"
           className="font-semibold"
           color="primary"
-        >{`${session.user?.name}:`}</Typography>
+        >{`${message.username}:`}</Typography>
         <Typography variant="body1" className="" color="primary">
           {message.message}
         </Typography>

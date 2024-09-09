@@ -9,33 +9,22 @@ import { Session } from "next-auth";
 
 type ChatProps = {
   session: Session;
+  roomname: string;
 };
 
-const Chat = ({ session }: ChatProps) => {
+const Chat = ({ session, roomname }: ChatProps) => {
   // Hooks
-  const { isConnected, activeUser } = useSocketContext();
+  const { activeUser } = useSocketContext();
 
   return (
     <div className="flex flex-col justify-between gap-4 w-full h-full">
-      <div className="flex gap-2 h-10 justify-center items-center absolute top-4 right-4">
-        <div>
-          <Typography variant="h6" color="primary">
-            Connected
-          </Typography>
-        </div>
-        <div
-          className={`w-2 h-2 rounded-full ${
-            isConnected ? "bg-green-500" : "bg-red-500"
-          }`}
-        ></div>
-      </div>
       <MessageFeed session={session} />
       <div>
         <Typography color="primary">{`${activeUser} ${
           activeUser ? "..." : ""
         }`}</Typography>
       </div>
-      <ChatInput session={session} />
+      <ChatInput session={session} roomname={roomname} />
     </div>
   );
 };

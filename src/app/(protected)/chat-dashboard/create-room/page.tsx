@@ -4,6 +4,7 @@ import Rooms from "@/components/Rooms";
 import Link from "next/link";
 import { auth } from "../../../../../auth";
 import RoomForm from "@/components/RoomForm";
+import BackToDashboard from "@/components/BackToDashboard";
 
 export default async function ChatDashBoard() {
   const session = await auth();
@@ -16,6 +17,7 @@ export default async function ChatDashBoard() {
           Create Room
         </Typography>
       </div>
+      <BackToDashboard />
       <div className="flex-grow overflow-hidden w-full">
         <RoomForm session={session} />
       </div>

@@ -19,7 +19,7 @@ export default async function ChatDashBoard() {
         </Link>
       </div>
       <div className="flex-grow overflow-hidden w-full">
-        <Rooms />
+        <Rooms username={session.user?.name!} />
       </div>
     </main>
   );
