@@ -37,7 +37,8 @@ const ChatInput = ({ session, roomname }: ChatInputProps) => {
         formData.message,
         session.user?.name!,
         session.user?.image!,
-        roomname
+        roomname,
+        new Date()
       );
       methods.reset();
     },
@@ -49,7 +50,7 @@ const ChatInput = ({ session, roomname }: ChatInputProps) => {
       <form className="flex" onSubmit={methods.handleSubmit(submit)}>
         <TextInput
           name="message"
-          activityHandler={onActivity}
+          activityHandler={() => onActivity(session.user?.name!, roomname)}
           session={session}
         />
       </form>

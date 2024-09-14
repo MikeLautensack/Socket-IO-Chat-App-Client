@@ -6,6 +6,7 @@ import ChatInput from "./ChatInput";
 import { Typography } from "@mui/material";
 import { useSocketContext } from "@/app/contexts/SocketContext";
 import { Session } from "next-auth";
+import Chatters from "./Chatters";
 
 type ChatProps = {
   session: Session;
@@ -14,16 +15,19 @@ type ChatProps = {
 
 const Chat = ({ session, roomname }: ChatProps) => {
   // Hooks
-  const { activeUser } = useSocketContext();
+  const { activeUser, chatters } = useSocketContext();
 
   return (
     <div className="flex flex-col justify-between gap-4 w-full h-full">
-      <MessageFeed session={session} />
-      <div>
+      <div className="flex justify-center items-center gap-4">
+        <MessageFeed session={session} />
+        <Chatters chatters={chatters} session={session} />
+      </div>
+      {activeUser && (
         <Typography color="primary">{`${activeUser} ${
           activeUser ? "..." : ""
         }`}</Typography>
-      </div>
+      )}
       <ChatInput session={session} roomname={roomname} />
     </div>
   );

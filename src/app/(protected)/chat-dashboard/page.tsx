@@ -19,7 +19,11 @@ export default async function ChatDashBoard() {
         </Link>
       </div>
       <div className="flex-grow overflow-hidden w-full">
-        <Rooms username={session.user?.name!} />
+        <Rooms
+          username={session.user?.name!}
+          profileImg={session.user?.image!}
+          session={session}
+        />
       </div>
     </main>
   );

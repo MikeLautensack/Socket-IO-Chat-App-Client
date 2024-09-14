@@ -15,7 +15,7 @@ const MessageFeed = ({ session }: MessageFeedProps) => {
   const { messages } = useSocketContext();
 
   return (
-    <div className="w-full flex-grow overflow-y-auto custom-scrollbar">
+    <div className="w-full h-full flex-grow overflow-y-scroll custom-scrollbar">
       <ul>
         {messages.map((message: MessageType, index: number) => (
           <li key={`${message}-${index}`}>

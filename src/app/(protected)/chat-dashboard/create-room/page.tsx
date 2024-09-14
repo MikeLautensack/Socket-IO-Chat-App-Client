@@ -1,7 +1,5 @@
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { redirect } from "next/navigation";
-import Rooms from "@/components/Rooms";
-import Link from "next/link";
 import { auth } from "../../../../../auth";
 import RoomForm from "@/components/RoomForm";
 import BackToDashboard from "@/components/BackToDashboard";

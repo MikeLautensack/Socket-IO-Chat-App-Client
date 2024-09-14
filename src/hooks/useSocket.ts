@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { getSocket } from "../socket";
+import { Session } from "next-auth";
+import { ChatUser } from "@/components/Chatters";
 
 export type Message = {
+  timestamp: Date;
   message: string;
   username: string;
   profileImg: string;
+  isHost?: boolean;
 };
 
-const useSocket = () => {
+const useSocket = (session?: Session) => {
   // State
   const [isConnected, setIsConnected] = useState<boolean | undefined>(
     undefined
@@ -15,6 +19,7 @@ const useSocket = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [activeUser, setActiveUser] = useState<string>("");
   const [rooms, setRooms] = useState<string[]>([]);
+  const [chatters, setChatters] = useState<ChatUser[]>([]);
 
   // Effects
   useEffect(() => {
@@ -31,13 +36,14 @@ const useSocket = () => {
     }
 
     function onMessage(value: Message) {
-      console.log("testing message event", value);
       setMessages((prev) => [
         ...prev,
         {
+          timestamp: value.timestamp,
           message: value.message,
           username: value.username,
           profileImg: value.profileImg,
+          isHost: value.isHost,
         },
       ]);
     }
@@ -57,7 +63,7 @@ const useSocket = () => {
       );
     }
 
-    function onUpdateRooms(value: string[]) {
+    function onSetRooms(value: string[]) {
       setRooms(
         value.map((room) => {
           return room;
@@ -65,15 +71,75 @@ const useSocket = () => {
       );
     }
 
-    function onJoinRoom(value: string) {}
+    function onSetRoomMessages(messages: Message[]) {
+      setMessages(
+        messages.map((message: Message) => {
+          return {
+            timestamp: message.timestamp,
+            message: message.message,
+            username: message.username,
+            profileImg: message.profileImg,
+            isHost: message.isHost,
+          };
+        })
+      );
+    }
+
+    function onUserJoinedRoom(value: {
+      username: string;
+      profileImg: string;
+      roomname: string;
+      date: Date;
+      message: string;
+      isHost: boolean;
+    }) {
+      if (value.username !== session?.user?.name) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            timestamp: value.date,
+            message: value.message,
+            username: value.username,
+            profileImg: value.profileImg,
+            isHost: value.isHost,
+          },
+        ]);
+      }
+    }
+
+    function onUserLeftRoom(value: {
+      username: string;
+      profileImg: string;
+      roomname: string;
+      date: Date;
+      message: string;
+    }) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          timestamp: value.date,
+          message: value.message,
+          username: value.username,
+          profileImg: value.profileImg,
+        },
+      ]);
+    }
+
+    function onSetChatters(value: ChatUser[]): void {
+      console.log("testing chatters in handler", value);
+      setChatters(value);
+    }
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("message", onMessage);
     socket.on("activity", onActivity);
     socket.on("roomList", onRoomList);
-    socket.on("joinRoom", onJoinRoom);
-    socket.on("updateRooms", onUpdateRooms);
+    socket.on("setRooms", onSetRooms);
+    socket.on("setRoomMessages", onSetRoomMessages);
+    socket.on("userJoinedRoom", onUserJoinedRoom);
+    socket.on("userLeftRoom", onUserLeftRoom);
+    socket.on("setChatters", onSetChatters);
 
     if (!socket.connected) {
       socket.connect();
@@ -85,41 +151,68 @@ const useSocket = () => {
       socket.off("message", onMessage);
       socket.off("activity", onActivity);
       socket.off("roomList", onRoomList);
-      socket.off("updateRooms", onUpdateRooms);
+      socket.off("setRooms", onSetRooms);
+      socket.off("setRoomMessages", onSetRoomMessages);
+      socket.off("userJoinedRoom", onUserJoinedRoom);
+      socket.off("userLeftRoom", onUserLeftRoom);
+      socket.off("setChatters", onSetChatters);
     };
-  }, []);
+  }, [session?.user?.name]);
 
   const sendMessage = useCallback(
     (
       message: string,
       username: string,
       profileImg: string,
-      roomname: string
+      roomname: string,
+      timestamp: Date
     ) => {
       const socket = getSocket();
-      socket.emit("message", { message, username, profileImg, roomname });
+      socket.emit("message", {
+        message,
+        username,
+        profileImg,
+        roomname,
+        timestamp,
+      });
     },
     []
   );
 
-  const onActivity = useCallback((username: string) => {
+  const onActivity = useCallback((username: string, roomname: string) => {
     const socket = getSocket();
-    socket.emit("activity", username);
+    socket.emit("activity", { username, roomname });
   }, []);
 
-  const onJoinRoom = useCallback((roomname: string, username: string) => {
-    const socket = getSocket();
-    socket.emit("joinRoom", { roomname, username });
-  }, []);
+  const onJoinRoom = useCallback(
+    (roomname: string, username: string, profileImg?: string) => {
+      const socket = getSocket();
+      socket.emit("joinRoom", { roomname, username, profileImg });
+      socket.emit("setRoomMessages", roomname);
+    },
+    []
+  );
+
+  const onLeaveRoom = useCallback(
+    (roomname: string, username: string, profileImg?: string) => {
+      const socket = getSocket();
+      setMessages([]);
+      setChatters([]);
+      socket.emit("leaveRoom", { roomname, username, profileImg });
+    },
+    []
+  );
 
   // Return
   return {
     isConnected,
     messages,
     rooms,
+    chatters,
     sendMessage,
     onActivity,
     onJoinRoom,
+    onLeaveRoom,
     activeUser,
   };
 };

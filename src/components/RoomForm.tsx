@@ -2,7 +2,7 @@
 
 import React, { useCallback } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import TextInput from "./TextInput";
+import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,15 +27,17 @@ const RoomForm = ({ session }: RoomFormProps) => {
       roomname: "",
     },
   });
+  const router = useRouter();
 
   const { onJoinRoom } = useSocketContext();
 
   // Callbacks
   const submit: SubmitHandler<RoomFormValues> = useCallback(
     async (formData) => {
-      onJoinRoom(formData.roomname, session.user?.name!);
+      onJoinRoom(formData.roomname, session.user?.name!, session.user?.image!);
+      router.push(`/chat-dashboard/chat?room=${formData.roomname}`);
     },
-    [onJoinRoom, session.user?.name]
+    [onJoinRoom, router, session.user?.image, session.user?.name]
   );
 
   return (
