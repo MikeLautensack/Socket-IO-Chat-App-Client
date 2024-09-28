@@ -152,7 +152,7 @@ const theme = createTheme({
     errorContainer: "#93000A",
     onErrorContainer: "#FFDAD6",
     onBackground: "#E2E2E9",
-    surface: "#121318",
+    surface: "#36393f",
     onSurface: "#E2E2E9",
     surfaceVariant: "#44464F",
     onSurfaceVariant: "#C5C6D0",

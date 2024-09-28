@@ -29,7 +29,7 @@ const Room = ({
   return (
     <div
       className={`flex justify-between items-center w-full h-14 px-4 md:px-8 lg:px-16 ${
-        index % 2 === 0 ? "bg-[#1A1B20]" : "bg-[#1E1F25]"
+        index % 2 === 0 ? "bg-[#32353b]" : "bg-[#3a3d42]"
       }`}
     >
       <div className="flex justify-center items-center gap-3">

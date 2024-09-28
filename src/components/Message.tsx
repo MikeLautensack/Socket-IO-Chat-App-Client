@@ -15,7 +15,7 @@ const Message = ({ message, session, index }: MessageProps) => {
   return (
     <div
       className={`flex flex-col justify-start items-center w-full px-8 py-2 gap-4 ${
-        index % 2 === 0 ? "bg-[#1A1B20]" : "bg-[#1E1F25]"
+        index % 2 === 0 ? "bg-[#32353b]" : "bg-[#3a3d42]"
       }`}
     >
       <div className="flex justify-start items-center w-full">
