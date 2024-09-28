@@ -1,6 +1,6 @@
 "use client";
 
-import useSocket, { Message } from "@/hooks/useSocket";
+import useSocket, { Message, RoomType } from "@/hooks/useSocket";
 import React, { createContext, useContext } from "react";
 import { Session } from "next-auth";
 import { ChatUser } from "@/components/Chatters";
@@ -13,7 +13,7 @@ type SocketContextProviderProps = {
 type SocketContextState = {
   isConnected: boolean | undefined;
   messages: Message[];
-  rooms: string[];
+  rooms: RoomType[];
   chatters: ChatUser[];
   sendMessage: (
     message: string,
@@ -29,6 +29,7 @@ type SocketContextState = {
     username: string,
     profileImg?: string
   ) => void;
+  onDeleteRoom: (roomname: string, username: string) => void;
   activeUser: string;
 };
 
@@ -48,6 +49,7 @@ const SocketContextProvider = ({
     onActivity,
     onJoinRoom,
     onLeaveRoom,
+    onDeleteRoom,
     activeUser,
   } = useSocket(session);
 
@@ -62,6 +64,7 @@ const SocketContextProvider = ({
         onActivity,
         onJoinRoom,
         onLeaveRoom,
+        onDeleteRoom,
         activeUser,
       }}
     >

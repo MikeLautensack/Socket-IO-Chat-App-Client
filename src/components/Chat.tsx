@@ -2,7 +2,7 @@
 
 import React from "react";
 import MessageFeed from "./MessageFeed";
-import ChatInput from "./ChatInput";
+import ChatInput from "./ChatForm";
 import { Typography } from "@mui/material";
 import { useSocketContext } from "@/app/contexts/SocketContext";
 import { Session } from "next-auth";
@@ -18,11 +18,9 @@ const Chat = ({ session, roomname }: ChatProps) => {
   const { activeUser, chatters } = useSocketContext();
 
   return (
-    <div className="flex flex-col justify-between gap-4 w-full h-full">
-      <div className="flex justify-center items-center gap-4">
-        <MessageFeed session={session} />
-        <Chatters chatters={chatters} session={session} />
-      </div>
+    <div className="flex flex-col justify-start w-full h-full">
+      <Chatters chatters={chatters} session={session} />
+      <MessageFeed session={session} />
       {activeUser && (
         <Typography color="primary">{`${activeUser} ${
           activeUser ? "..." : ""

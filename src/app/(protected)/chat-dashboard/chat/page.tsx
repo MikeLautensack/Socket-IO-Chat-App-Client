@@ -13,9 +13,22 @@ export default async function ChatPage({
   if (!session) return redirect("/");
 
   return (
-    <main className="flex flex-col items-center justify-between px-4 pb-4 gap-4 relative h-[calc(100vh-56px)]">
-      <div className="w-full flex justify-between items-center h-11">
-        <Typography variant="h4" color="primary">
+    <main className="flex flex-col items-center justify-between gap-4 relative h-[calc(100vh-56px)]">
+      <div className="w-full flex justify-between items-center h-11 px-4 md:px-8 lg:px-16">
+        <Typography
+          variant="h4"
+          color="white"
+          sx={{
+            fontSize: {
+              xs: "1.25rem", // 20px
+              sm: "1.5rem", // 24px
+              md: "1.75rem", // 28px
+              lg: "2rem", // 32px
+              xl: "2.25rem", // 36px
+            },
+            fontWeight: "medium",
+          }}
+        >
           {`Room: ${searchParams.room}`}
         </Typography>
         <LeaveRoom
@@ -24,7 +37,7 @@ export default async function ChatPage({
           profileImg={session.user?.image!}
         />
       </div>
-      <div className="w-full h-[calc(100%-60px)]">
+      <div className="w-full h-[calc(100vh-116px)]">
         <Chat session={session} roomname={searchParams.room as string} />
       </div>
     </main>

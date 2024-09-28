@@ -1,60 +1,86 @@
-"use client";
-
-import React, { useCallback } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import TextInput from "./TextInput";
-import { useSocketContext } from "@/app/contexts/SocketContext";
+import { Box, Button, TextField } from "@mui/material";
 import { Session } from "next-auth";
-
-const MessageFormSchema = z.object({
-  message: z.string().min(1, { message: "Message is required" }),
-});
-
-type MessageFormValues = z.infer<typeof MessageFormSchema>;
+import React from "react";
+import { useController, useFormContext } from "react-hook-form";
 
 type ChatInputProps = {
+  name: string;
+  label?: string;
+  size?: any;
+  readonly?: boolean;
+  disabled?: boolean;
+  type?: string;
+  activityHandler?: (username: string) => void;
   session: Session;
-  roomname: string;
 };
 
-const ChatInput = ({ session, roomname }: ChatInputProps) => {
+const ChatInput = ({
+  name,
+  label,
+  size = "normal",
+  readonly,
+  disabled,
+  type,
+  activityHandler,
+  session,
+}: ChatInputProps) => {
   // Hooks
-  const methods = useForm<MessageFormValues>({
-    resolver: zodResolver(MessageFormSchema),
-    defaultValues: {
-      message: "",
-    },
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
+  const { field } = useController({
+    control,
+    name,
+    defaultValue: "",
   });
 
-  const { sendMessage, onActivity } = useSocketContext();
-
-  // Callbacks
-  const submit: SubmitHandler<MessageFormValues> = useCallback(
-    async (formData) => {
-      sendMessage(
-        formData.message,
-        session.user?.name!,
-        session.user?.image!,
-        roomname,
-        new Date()
-      );
-      methods.reset();
-    },
-    [methods, roomname, sendMessage, session.user?.image, session.user?.name]
-  );
-
   return (
-    <FormProvider {...methods}>
-      <form className="flex" onSubmit={methods.handleSubmit(submit)}>
-        <TextInput
-          name="message"
-          activityHandler={() => onActivity(session.user?.name!, roomname)}
-          session={session}
-        />
-      </form>
-    </FormProvider>
+    <Box component="div" className="flex w-full">
+      <TextField
+        sx={{
+          "& .MuiInputBase-input": {
+            backgroundColor: "surfaceContainerHighest",
+            color: "primary.main", // Text color set to primary
+            borderRadius: "4px 0px 0px 4px",
+          },
+          "& .MuiInputLabel-root": {
+            color: "primary.main", // Label color set to primary
+          },
+        }}
+        label={label}
+        fullWidth
+        size={size}
+        disabled={disabled}
+        slotProps={{
+          input: {
+            readOnly: readonly,
+          },
+        }}
+        type={type}
+        error={!!errors[name]}
+        helperText={errors[name]?.message as React.ReactNode}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          field.onChange(e);
+          if (activityHandler) {
+            activityHandler(session.user?.name!);
+          }
+        }}
+        value={field.value}
+        ref={field.ref}
+      />
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          borderRadius: "0rem 0px 0px 0rem",
+          boxSizing: "border-box",
+        }}
+      >
+        Send!
+      </Button>
+    </Box>
   );
 };
 

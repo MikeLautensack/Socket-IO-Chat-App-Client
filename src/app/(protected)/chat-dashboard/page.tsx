@@ -9,10 +9,10 @@ export default async function ChatDashBoard() {
   if (!session) return redirect("/");
 
   return (
-    <main className="flex h-screen flex-col items-center justify-between p-4 gap-4 relative">
-      <div className="w-full flex justify-between items-center h-11">
-        <Typography variant="h4" color="primary">
-          Rooms
+    <main className="flex flex-col items-center justify-between gap-4 relative h-[calc(100vh-56px)]">
+      <div className="w-full flex justify-between items-center h-11 my-4 px-4 md:px-8 lg:px-16">
+        <Typography variant="h5" color="white">
+          Chat Rooms
         </Typography>
         <Link href="/chat-dashboard/create-room">
           <Button variant="contained">Create Room</Button>

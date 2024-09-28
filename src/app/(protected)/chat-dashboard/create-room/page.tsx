@@ -9,16 +9,14 @@ export default async function ChatDashBoard() {
   if (!session) return redirect("/");
 
   return (
-    <main className="flex h-screen flex-col items-center justify-between p-4 gap-4 relative">
-      <div className="w-full flex justify-start items-center h-11">
-        <Typography variant="h4" color="primary">
+    <main className="flex h-[calc(100vh-56px)] flex-col items-center justify-start px-4 md:px-8 lg:px-16 gap-8 relative">
+      <div className="w-full flex justify-between items-center h-11 mt-4">
+        <Typography variant="h4" color="white">
           Create Room
         </Typography>
+        <BackToDashboard />
       </div>
-      <BackToDashboard />
-      <div className="flex-grow overflow-hidden w-full">
-        <RoomForm session={session} />
-      </div>
+      <RoomForm session={session} />
     </main>
   );
 }

@@ -12,16 +12,34 @@ type RoomProps = {
   username: string;
   profileImg: string;
   session: Session;
+  host: string;
+  index: number;
 };
 
-const Room = ({ roomname, username, profileImg, session }: RoomProps) => {
+const Room = ({
+  roomname,
+  username,
+  profileImg,
+  session,
+  host,
+  index,
+}: RoomProps) => {
   // Hooks
-  const { onJoinRoom } = useSocketContext();
+  const { onJoinRoom, onDeleteRoom } = useSocketContext();
   return (
-    <div className="flex justify-between items-center w-full h-14">
-      <Typography color="primary" variant="body1">
-        {`Roomname: ${roomname}`}
-      </Typography>
+    <div
+      className={`flex justify-between items-center w-full h-14 px-4 md:px-8 lg:px-16 ${
+        index % 2 === 0 ? "bg-[#1A1B20]" : "bg-[#1E1F25]"
+      }`}
+    >
+      <div className="flex justify-center items-center gap-3">
+        <Typography color="white" variant="h6">
+          Room Name:
+        </Typography>
+        <Typography color="white" variant="body1">
+          {roomname}
+        </Typography>
+      </div>
       <div className="flex justify-center items-center gap-4">
         <Link href={`/chat-dashboard/chat?room=${roomname}`}>
           <Button
@@ -32,8 +50,12 @@ const Room = ({ roomname, username, profileImg, session }: RoomProps) => {
             Join Room
           </Button>
         </Link>
-        {session?.user?.name! === username && (
-          <Button variant="contained" color="error">
+        {session?.user?.name! === host && (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => onDeleteRoom(roomname, username)}
+          >
             <DeleteIcon />
           </Button>
         )}

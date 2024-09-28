@@ -1,5 +1,4 @@
-import { createTheme, extendTheme } from "@mui/material/styles";
-import { create } from "domain";
+import { createTheme } from "@mui/material/styles";
 import { Poppins, Lato, Source_Sans_3 } from "next/font/google";
 
 declare module "@mui/material/styles" {
@@ -130,14 +129,14 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#AFC6FF",
+      main: "#7289da",
     },
     surfaceTint: "#AFC6FF",
     onPrimary: "#142F60",
     primaryContainer: "#2E4578",
     onPrimaryContainer: "#D9E2FF",
     secondary: {
-      main: "#BFC6DC",
+      main: "#99aab5",
     },
     onSecondary: "#293042",
     secondaryContainer: "#404659",
@@ -147,7 +146,7 @@ const theme = createTheme({
     tertiaryContainer: "#593D5A",
     onTertiaryContainer: "#FDD7FA",
     error: {
-      main: "#E6002A",
+      main: "#f04747",
     },
     onError: "#690005",
     errorContainer: "#93000A",
@@ -181,8 +180,11 @@ const theme = createTheme({
     surfaceContainer: "#1E1F25",
     surfaceContainerHigh: "#282A2F",
     surfaceContainerHighest: "#33353A",
+    success: {
+      main: "#43b581",
+    },
     cash: "#3e9c35",
-    bg: "#121318",
+    bg: "#36393f",
   },
 });
 export default theme;

@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Session } from "next-auth";
 import React from "react";
 import Image from "next/image";
@@ -14,11 +14,11 @@ type MessageProps = {
 const Message = ({ message, session, index }: MessageProps) => {
   return (
     <div
-      className={`flex justify-between items-center w-full px-8 py-2 ${
+      className={`flex flex-col justify-start items-center w-full px-8 py-2 gap-4 ${
         index % 2 === 0 ? "bg-[#1A1B20]" : "bg-[#1E1F25]"
       }`}
     >
-      <div className="flex justify-start items-center">
+      <div className="flex justify-start items-center w-full">
         <div className="relative w-8 h-8 mr-2">
           <Image
             fill
@@ -28,27 +28,72 @@ const Message = ({ message, session, index }: MessageProps) => {
             style={{ objectFit: "cover" }} // This ensures the image covers the area without stretching
           />
         </div>
-        <div className="flex gap-1">
-          <Typography
-            variant="body1"
-            className="font-semibold"
-            color="primary"
-          >{`${message.username}: `}</Typography>
-          {message.isHost === true && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: { xs: "flex-start" },
+          }}
+        >
+          <div className="flex gap-1 justify-start items-center">
             <Typography
               variant="body1"
-              className="font-semibold"
-              color="success"
-            >{`HOST `}</Typography>
-          )}
-          <Typography variant="body1" className="" color="primary">
-            {message.message}
+              color="white"
+              sx={{
+                fontWeight: "semibold",
+                fontSize: {
+                  xs: "0.875rem",
+                  sm: "1rem",
+                  md: "1.125rem",
+                },
+              }}
+            >{`${message.username}: `}</Typography>
+            {message.isHost === true && (
+              <Typography
+                variant="body1"
+                color="success"
+                sx={{
+                  fontWeight: "semibold",
+                  fontSize: {
+                    xs: "0.75rem",
+                    sm: "0.875rem",
+                    md: "1rem",
+                  },
+                }}
+              >{`HOST `}</Typography>
+            )}
+          </div>
+          <Typography
+            color="white"
+            sx={{
+              fontSize: {
+                xs: "0.7rem",
+                sm: "0.8rem",
+                md: "0.9rem",
+              },
+            }}
+          >
+            {format(message.timestamp, "MMM d, yyyy h:mm:ss a")}
           </Typography>
-        </div>
+        </Box>
       </div>
-      <div className="flex justify-center items-center">
-        <Typography color="primary">
-          {format(message.timestamp, "MMM d, yyyy h:mm:ss a")}
+      <div className="flex justify-start items-start w-full max-w-full">
+        <Typography
+          variant="body1"
+          color="white"
+          sx={{
+            fontSize: {
+              xs: "0.75rem",
+              sm: "0.875rem",
+              md: "1rem",
+            },
+            overflowWrap: "break-word",
+            wordWrap: "break-word",
+            hyphens: "auto",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {message.message}
         </Typography>
       </div>
     </div>

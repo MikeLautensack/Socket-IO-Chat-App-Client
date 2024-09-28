@@ -11,7 +11,7 @@ type ChatUserProps = {
 
 const ChatUser = ({ chatuser, session }: ChatUserProps) => {
   return (
-    <div className="flex justify-center items-center gap-4">
+    <div className="flex justify-center items-center gap-1">
       <div className="relative w-8 h-8 mr-2">
         <Image
           fill
@@ -22,17 +22,26 @@ const ChatUser = ({ chatuser, session }: ChatUserProps) => {
         />
       </div>
       <div className="flex gap-1">
-        <Typography
-          variant="body1"
-          className="font-semibold"
-          color="primary"
-        >{`${chatuser.username}: `}</Typography>
+        <div className="flex">
+          <Typography
+            variant="body1"
+            className="font-semibold"
+            color="white"
+          >{`${chatuser.username}`}</Typography>
+          {chatuser.isHost === true && (
+            <Typography
+              variant="body1"
+              className="font-semibold"
+              color="white"
+            >{`:`}</Typography>
+          )}
+        </div>
         {chatuser.isHost === true && (
           <Typography
             variant="body1"
             className="font-semibold"
             color="success"
-          >{`HOST `}</Typography>
+          >{`HOST`}</Typography>
         )}
       </div>
     </div>

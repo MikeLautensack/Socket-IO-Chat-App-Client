@@ -37,49 +37,41 @@ const TextInput = ({
   });
 
   return (
-    <Box component="div" className="flex w-full">
-      <TextField
-        sx={{
-          "& .MuiInputBase-input": {
-            backgroundColor: "surfaceContainerHighest",
-            height: "1rem", // Fixed input height
-            color: "primary.main", // Text color set to primary
-            borderRadius: "12px 0px 0px 12px",
-          },
-        }}
-        label={label}
-        fullWidth
-        size={size}
-        disabled={disabled}
-        slotProps={{
-          input: {
-            readOnly: readonly,
-          },
-        }}
-        type={type}
-        error={!!errors[name]}
-        helperText={errors[name]?.message as React.ReactNode}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          field.onChange(e);
-          if (activityHandler) {
-            activityHandler(session.user?.name!);
-          }
-        }}
-        value={field.value}
-        ref={field.ref}
-      />
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{
-          height: "49px",
-          borderRadius: "0rem 12px 12px 0rem",
-          boxSizing: "border-box",
-        }}
-      >
-        Send!
-      </Button>
-    </Box>
+    <TextField
+      sx={{
+        "& .MuiInputBase-input": {
+          backgroundColor: "surfaceContainerHighest",
+          color: "white", // Text color set to primary
+          borderRadius: "4px 0px 0px 4px",
+        },
+        "& .MuiInputLabel-root": {
+          color: "white", // Label color set to primary
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+          color: "white", // Focused label color set to primary
+        },
+      }}
+      label={label}
+      fullWidth
+      size={size}
+      disabled={disabled}
+      slotProps={{
+        input: {
+          readOnly: readonly,
+        },
+      }}
+      type={type}
+      error={!!errors[name]}
+      helperText={errors[name]?.message as React.ReactNode}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        field.onChange(e);
+        if (activityHandler) {
+          activityHandler(session.user?.name!);
+        }
+      }}
+      value={field.value}
+      ref={field.ref}
+    />
   );
 };
 

@@ -10,7 +10,7 @@ const ConnectionState = () => {
 
   return (
     <div className="flex justify-center items-center gap-2">
-      <Typography variant="body1" color="primary">
+      <Typography variant="body1" color="white">
         {isConnected ? "Connected" : "Disconnected"}
       </Typography>
       <div

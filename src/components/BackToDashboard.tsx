@@ -7,7 +7,7 @@ import React from "react";
 const BackToDashboard = () => {
   return (
     <Link href={"/chat-dashboard"}>
-      <Button>To Dashboard</Button>
+      <Button variant="contained">Back To Dashboard</Button>
     </Link>
   );
 };

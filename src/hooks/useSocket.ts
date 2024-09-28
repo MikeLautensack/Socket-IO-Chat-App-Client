@@ -3,6 +3,11 @@ import { getSocket } from "../socket";
 import { Session } from "next-auth";
 import { ChatUser } from "@/components/Chatters";
 
+export type RoomType = {
+  host: string;
+  roomname: string;
+};
+
 export type Message = {
   timestamp: Date;
   message: string;
@@ -18,7 +23,7 @@ const useSocket = (session?: Session) => {
   );
   const [messages, setMessages] = useState<Message[]>([]);
   const [activeUser, setActiveUser] = useState<string>("");
-  const [rooms, setRooms] = useState<string[]>([]);
+  const [rooms, setRooms] = useState<RoomType[]>([]);
   const [chatters, setChatters] = useState<ChatUser[]>([]);
 
   // Effects
@@ -55,20 +60,12 @@ const useSocket = (session?: Session) => {
       }, 3000);
     }
 
-    function onRoomList(value: string[]) {
-      setRooms(
-        value.map((room) => {
-          return room;
-        })
-      );
+    function onRoomList(value: RoomType[]) {
+      setRooms(value.map((room: RoomType) => room));
     }
 
-    function onSetRooms(value: string[]) {
-      setRooms(
-        value.map((room) => {
-          return room;
-        })
-      );
+    function onSetRooms(value: RoomType[]) {
+      setRooms(value.map((room: RoomType) => room));
     }
 
     function onSetRoomMessages(messages: Message[]) {
@@ -203,6 +200,11 @@ const useSocket = (session?: Session) => {
     []
   );
 
+  const onDeleteRoom = useCallback((roomname: string, username: string) => {
+    const socket = getSocket();
+    socket.emit("deleteRoom", { roomname, username });
+  }, []);
+
   // Return
   return {
     isConnected,
@@ -213,6 +215,7 @@ const useSocket = (session?: Session) => {
     onActivity,
     onJoinRoom,
     onLeaveRoom,
+    onDeleteRoom,
     activeUser,
   };
 };

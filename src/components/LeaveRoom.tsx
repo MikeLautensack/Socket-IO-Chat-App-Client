@@ -19,6 +19,7 @@ const LeaveRoom = ({ roomname, username, profileImg }: LeaveRoomProps) => {
       <Button
         variant="contained"
         onClick={() => onLeaveRoom(roomname, username, profileImg)}
+        sx={{ whiteSpace: "nowrap" }}
       >
         Leave Room
       </Button>
